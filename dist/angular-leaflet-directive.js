@@ -1032,11 +1032,6 @@ angular.module("leaflet-directive").directive('paths', ["$log", "$q", "leafletDa
                                 var pathData = newPaths[newName];
                                 var newPath = createPath(newName, newPaths[newName], defaults);
 
-                                // bind popup if defined
-                                if (isDefined(newPath) && isDefined(pathData.message)) {
-                                    newPath.bindPopup(pathData.message);
-                                }
-
                                 // Show label if defined
                                 if (leafletHelpers.LabelPlugin.isLoaded() && isDefined(pathData.label) && isDefined(pathData.label.message)) {
                                     newPath.bindLabel(pathData.label.message, pathData.label.options);
@@ -1078,6 +1073,13 @@ angular.module("leaflet-directive").directive('paths', ["$log", "$q", "leafletDa
                                 }
 
                                 bindPathEvents(newPath, newName, pathData, leafletScope);
+                            }
+
+                            // bind popup if defined or changed
+                            var pathData = newPaths[newName];
+                            var existingPath = leafletPaths[newName];
+                            if (isDefined(pathData.message) && isDefined(existingPath)) {
+                                existingPath.bindPopup(pathData.message);
                             }
                         }
 
